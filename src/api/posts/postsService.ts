@@ -5,7 +5,8 @@ import {IPost} from 'modules/posts/interfaces/IPost'
 
 
 export const addPost = (data:IPost) => {
-    return post('664/posts',JSON.stringify({...data,date:new Date().toUTCString()}),data.token)
+    const {token, ...rest} = data;
+    return post('664/posts',JSON.stringify({...rest,date:new Date().toUTCString()}),token)
 }
 
 export const getPosts = (token:any) => {

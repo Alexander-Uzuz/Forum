@@ -1,5 +1,5 @@
 import { IComment } from './../../modules/comments/interfaces/IComment';
-import {get, put, post} from '../baseRequest';
+import {get, put, post, remove} from '../baseRequest';
 
 
 export const getComments = (token:any) =>{
@@ -7,5 +7,12 @@ export const getComments = (token:any) =>{
 }
 
 export const addComments = (data:any) =>{
-    return post(`664/comments`,JSON.stringify(data), data.token)
+    const {token, ...rest} = data;
+
+    return post(`664/comments`,JSON.stringify(rest), token)
 }
+
+export const removeComments = (data:{id:number,token:any}) =>{
+    return remove(`comments/${data.id}`, data.token)
+}
+

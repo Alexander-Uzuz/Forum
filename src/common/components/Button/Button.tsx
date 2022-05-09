@@ -15,17 +15,27 @@ type Props = {
     type?:'button' | 'submit';
     as?:any;
     to?:string;
+    activeRules?:boolean;
+    handle?:any;
+    download?:boolean;
+    href?:string;
 };
 
-export const Button:FC<Props> = ({as, to, ...props}) => {
+export const Button:FC<Props> = ({as, to,handle, download,href, ...props}) => {
+
+  const handleButton = () =>{
+    if(handle){
+      handle(true)
+    }
+  }
 
 
   return (
-    <ButtonContainer{...props} as={as} to={to}>
+    <ButtonContainer{...props} as={as} to={to} download={download ? true : false} href={href}>
       {
           props.images && <ButtonIcon src={props.images} {...props}/>
       }
-      <ButtonBtn  {...props}>{props.text}</ButtonBtn>
+      <ButtonBtn onClick={handleButton}  {...props}>{props.text}</ButtonBtn>
     </ButtonContainer>
   );
 };

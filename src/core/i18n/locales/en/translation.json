@@ -1,0 +1,17 @@
+{
+    "titleLogin":"We’ve Missed You!",
+    "subtitleLogin":"More than 150 questions are waiting for your wise suggestions!",
+    "titleRegistration":"Join Alem Community",
+    "subtitleRegistration":"Get more features and priviliges by joining to the most helpful community",
+    "buttonLogin":"Login",
+    "buttonCancel":"Cancel",
+    "buttonRegister":"Register",
+    "buttonAsk":"Ask a question",
+    "buttonGetAboutAdmin":"Get data about Admin",
+    "buttonSuggest":"Suggest",
+    "buttonForumRules":"ForumRules",
+    "forumRulesTitle":"Forum Rules",
+    "forumRulesSubtitle":"Minimum message length 3 characters Maximum file size 10 MB Forbidden words will be overwritten with asterisks",
+    "forumRulesHide":"Hide",
+    "addComment":"Add Comment"
+}

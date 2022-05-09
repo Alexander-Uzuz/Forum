@@ -1,20 +1,18 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {addPost, getPosts, getPost, changePost,removePost} from 'api/posts/postsService';
 import { IPost } from './interfaces/IPost';
-import { addPostReducer, removePostReducer } from './postsSlice';
+import { addPostReducer, removePostReducer,getPostsReducer,getPostReducer,changePostReducer } from './postsSlice';
 
 
 export const fetchGetPosts:any = createAsyncThunk(
     'posts/fetchGetPosts',
-    async function(token,{rejectWithValue}){
+    async function(token,{rejectWithValue, dispatch}){
         try{
             const response = await getPosts(token);
 
-            if(typeof response === 'string'){
-                throw new Error(response)
-            }
-
+            // dispatch(getPostsReducer(response))
             return response;
+
         }catch(err:any){
             return rejectWithValue(err.message)
         }
@@ -23,15 +21,12 @@ export const fetchGetPosts:any = createAsyncThunk(
 
 export const fetchGetPost:any = createAsyncThunk(
     'posts/fetchGetPost',
-    async function(data:{token:any,id:string},{rejectWithValue}){
+    async function(data:{token:any,id:string},{rejectWithValue, dispatch}){
         try{
             const response = await getPost(data);
 
-            if(typeof response === 'string'){
-                throw new Error(response)
-            }
-
-            return response
+            // dispatch(getPostReducer(response))
+            return response;
         }catch(err:any){
             return rejectWithValue(err.message)
         }
@@ -44,13 +39,9 @@ export const fetchAddPost:any = createAsyncThunk(
         try{
             const response = await addPost(data);
 
-            if(typeof response === 'string'){
-                throw new Error(response)
-            }
-
             // dispatch(addPostReducer(response))
-
             return response;
+
         }catch(err:any){
             return rejectWithValue(err.message);
         }
@@ -59,9 +50,11 @@ export const fetchAddPost:any = createAsyncThunk(
 
 export const fetchChangePost:any = createAsyncThunk(
     'posts/fetchChangePost',
-    async function(data:IPost,{rejectWithValue}){
+    async function(data:IPost,{rejectWithValue, dispatch}){
         try{
             const response = await changePost(data);
+
+            // dispatch(changePostReducer(response))
 
             return response;
         }catch(err:any){
@@ -76,11 +69,7 @@ export const fetchRemovePost:any = createAsyncThunk(
         try{
             const response = await removePost(data);
 
-            // dispatch(removePostReducer(data.id))
-
-            return response;
-
-            console.log(response,'response')
+            return data.id;
         }catch(err:any){
             return rejectWithValue(err.message)
         }

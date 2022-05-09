@@ -9,6 +9,9 @@ export interface IPost{
     date?:string;
     message:string;
     avatarUrl?:string;
+    image?:any;
+    video?:any;
+    music?:any;
     token?:string;
 }
 

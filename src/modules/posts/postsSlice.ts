@@ -13,6 +13,7 @@ import {
   fetchGetPosts,
   fetchGetPost,
   fetchChangePost,
+  fetchRemovePost
 } from "./PostThunk";
 
 const initialState: IPostState = {
@@ -26,28 +27,70 @@ const postsSlice = createSlice({
   name: "posts",
   initialState,
   reducers: {
+      getPostsReducer(state:IPostState,action:PayloadAction<IPost[]>){
+        state.posts = action.payload;
+      },
+      getPostReducer(state:IPostState,action:PayloadAction<IPost>){
+        state.post = action.payload
+      },
       addPostReducer(state:IPostState,action:PayloadAction<IPost>){
-          state.posts.push(action.payload);
+        state.posts.push(action.payload);
       },
       removePostReducer(state:IPostState,action:PayloadAction<number>){
         state.posts = state.posts.filter(post => post.id !== action.payload);
+      },
+      changePostReducer(state:IPostState,action:PayloadAction<IPost>){
+        let currentPost = state.posts.find(post => post.id === action.payload.id);
+        currentPost = action.payload
       }
   },
-  extraReducers: {
-    [fetchAddPost.pending]: setPending,
-    [fetchAddPost.fulfilled]: setFulfilledAdd,
-    [fetchAddPost.rejected]: setRejected,
-    [fetchGetPosts.pending]: setPending,
-    [fetchGetPosts.fulfilled]: setFulfilledGetPosts,
-    [fetchGetPosts.rejected]: setRejected,
-    [fetchGetPost.pending]: setPending,
-    [fetchGetPost.fulfilled]: setFulfilledGetPost,
-    [fetchChangePost.rejected]: setRejected,
-    [fetchChangePost.pending]: setPending,
-    [fetchChangePost.fulfilled]: setFulfilledChangePost,
-    [fetchChangePost.rejected]: setRejected,
+  extraReducers: (builder) =>{
+    builder.addCase(fetchAddPost.pending, state =>{
+    });
+    builder.addCase(fetchAddPost.fulfilled, (state,action:PayloadAction<IPost>) =>{
+      state.posts.push(action.payload)
+    });
+    builder.addCase(fetchAddPost.rejected, (state,action) =>{
+      state.error = action.payload;
+    });
+
+    builder.addCase(fetchGetPosts.pending, state =>{
+    });
+    builder.addCase(fetchGetPosts.fulfilled,(state,action:PayloadAction<IPost[]>) =>{
+      state.posts = action.payload;
+    });
+    builder.addCase(fetchGetPosts.rejected,(state,action) =>{
+      state.error = action.payload;
+    });
+
+    builder.addCase(fetchGetPost .pending, state =>{
+    });
+    builder.addCase(fetchGetPost .fulfilled, (state,action:PayloadAction<IPost>) =>{
+      state.post = action.payload
+    });
+    builder.addCase(fetchGetPost .rejected, (state, action) =>{
+      state.error = action.payload;
+    });
+
+    builder.addCase(fetchChangePost .pending, state =>{})
+    builder.addCase(fetchChangePost .fulfilled, (state,action:PayloadAction<IPost>) =>{
+      let currentPost = state.posts.find(post => post.id === action.payload.id);
+      currentPost = action.payload     
+    })
+    builder.addCase(fetchChangePost .rejected, (state, action) =>{
+      state.error = action.payload;
+    })
+
+    builder.addCase(fetchRemovePost .pending, state =>{});
+    builder.addCase(fetchRemovePost .fulfilled, (state,action) =>{
+      console.log(action, 'action')
+      state.posts = state.posts.filter(post => post.id !== action.payload);
+    });
+    builder.addCase(fetchRemovePost .rejected, (state,action) =>{
+      state.error = action.payload;
+    })
   },
 });
 
-export const {addPostReducer, removePostReducer} = postsSlice.actions;
+export const {addPostReducer, removePostReducer,getPostsReducer, getPostReducer,changePostReducer} = postsSlice.actions;
 export default postsSlice.reducer;

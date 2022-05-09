@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 
 import {fetchGetPost} from '../PostThunk';
 import { fetchAddComments,fetchGetComments } from "modules/comments/commentsThunk";
-import {getCurrentComments} from 'modules/comments/commentsSlice'
+import {getCurrentCommentsReducer} from 'modules/comments/commentsSlice'
 import { useAppDispatch, useAppSelector } from "core/redux/hooks";
 import { IComment} from "../../comments/interfaces/IComment";
 import { Post } from "common/components/Post/Post";
@@ -34,7 +34,7 @@ export const PostView:FC<Props> = (props: Props) => {
       }    
       if(user.token){
         await dispatch(fetchGetPost({token:user.token,id}))
-        dispatch(getCurrentComments(id))
+        dispatch(getCurrentCommentsReducer(id))
       }
   })();
   },[])

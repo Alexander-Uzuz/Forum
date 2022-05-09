@@ -1,4 +1,6 @@
-import React,{FC} from 'react';
+import React,{FC, useState} from 'react';
+import { useAppDispatch, useAppSelector } from 'core/redux/hooks';
+import { fetchRemoveComments } from 'modules/comments/commentsThunk';
 import styled from "styled-components";
 import Avatar from "assets/icons/avatar.svg";
 import Edit from "assets/icons/edit.svg";
@@ -7,6 +9,7 @@ import Message from "assets/icons/messageActivity.svg";
 import Arrow from "assets/icons/arrow-up.svg";
 import {IPost} from 'modules/posts/interfaces/IPost';
 import {IComment} from 'modules/comments/interfaces/IComment'
+import {PocoMenu} from 'common/components/PoCoMenu/PocoMenu';
 
 
 type Props = {
@@ -14,6 +17,19 @@ type Props = {
 }
 
 export const Comment:FC<Props> = ({comment}) => {
+  const token = useAppSelector(state => state.user.user.token);
+  const [active, setActive] = useState(false);
+  const dispatch = useAppDispatch();
+
+  const handleMenu = () => {
+    setActive(!active);
+  }
+
+  const handleDelete = () => {
+    dispatch(fetchRemoveComments({id:comment.id, token}))
+    setActive(false);
+  }
+
   return (
     <CommentWrapper>
     <CommentTop>
@@ -24,7 +40,8 @@ export const Comment:FC<Props> = ({comment}) => {
           <CommentTopContentTime>{comment.date}</CommentTopContentTime>
         </CommentTopContentInfo>
       </CommentTopContent>
-      <CommentTopEdit src={Edit} />
+      <CommentTopEdit src={Edit} onClick={handleMenu}/>
+      <PocoMenu active={active} onChange={setActive} id={comment.id} role='comment' top='9px' right='36px' handleDelete={handleDelete}/>
     </CommentTop>
     <CommentCenter>
       <CommentCenterText>{comment.text}</CommentCenterText>
@@ -68,6 +85,7 @@ const CommentWrapper = styled.div`
 `;
 
 const CommentTop = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;

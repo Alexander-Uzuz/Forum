@@ -10,9 +10,11 @@ import Avatar from "assets/icons/avatar.svg";
 import { useAppSelector } from "core/redux/hooks";
 import { useParams, Link,useLocation } from "react-router-dom";
 
-type Props = {};
+type Props = {
+  handleRules:(activeRules:boolean) => void;
+};
 
-export const Header: FC<Props> = (props: Props) => {
+export const Header: FC<Props> = ({handleRules}) => {
   const { user } = useAppSelector((state) => state.user);
   const [active, setActive] = useState(false);
   const history = useLocation();
@@ -34,6 +36,19 @@ export const Header: FC<Props> = (props: Props) => {
             images={Plus}
             as={Link}
             to="posts/addPost"
+          />
+          <Button 
+          text="Get data about Admin"
+          margin="0 0 0 20px"
+          as={'a'}
+          download
+          href="rulesForum.docx"
+          />
+          <Button
+            text="Forum Rules"
+            margin="0 0 0 20px"
+            background="#1682FD"
+            handle={handleRules}
           />
           <HeaderSetting onClick={handleMenu}>
             <AvatarImg src={user.avatarUrl ? user.avatarUrl : Avatar} />

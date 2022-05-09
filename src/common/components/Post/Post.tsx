@@ -2,8 +2,8 @@ import {BaseSyntheticEvent, FC, useState} from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
-import { useAppSelector } from "core/redux/hooks";
-
+import { useAppSelector, useAppDispatch } from "core/redux/hooks";
+import {fetchRemovePost} from 'modules/posts/PostThunk';
 import Avatar from "assets/icons/avatar.svg";
 import Edit from "assets/icons/edit.svg";
 import Eye from "assets/icons/eye.svg";
@@ -21,16 +21,24 @@ type Props = {
 };
 
 export const Post:FC<Props> = ({as,to,post,...props}) => {
+  const token = useAppSelector(state => state.user.user.token)
   const comments = useAppSelector(state => state.comments.comments);
   const currentComments = comments.filter(c => c.postId === post?.id);
   const [activeMenu, setActiveMenu] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-  const handleMenu = () => setActiveMenu(!activeMenu);
+  const handleMenu = () => {
+    setActiveMenu(!activeMenu);
+  }
+
+  const handleDelete = () => {
+    dispatch(fetchRemovePost({id:post?.id, token}))
+    setActiveMenu(false);
+  }
+  
 
   const handlePost = (e:BaseSyntheticEvent) => {
-    console.log(e.target.closest('.edit'))
-    console.log(e.target.closest('.pocoMenu'),'classModal')
     if(e.target.closest('.edit')){
 
     }else{
@@ -51,7 +59,7 @@ export const Post:FC<Props> = ({as,to,post,...props}) => {
           </PostTopContentInfo>
         </PostTopContent>
         <PostTopEdit onClick={handleMenu} src={Edit} className='edit'/>
-        <PocoMenu active={activeMenu} id={post?.id}/>
+        <PocoMenu active={activeMenu} id={post?.id} onChange={setActiveMenu} handleDelete={handleDelete}/>
       </PostTop>
       <PostCenter>
         <PostCenterTitle>{post?.title}</PostCenterTitle>

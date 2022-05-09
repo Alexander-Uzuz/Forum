@@ -8,7 +8,6 @@ type Props = {
 export const Image:FC<Props> = ({file}) => {
     const [fileUrl, setFileUrl] = useState<any>(null);
 
-
     useEffect(() =>{
         if(file){
             setFileUrl(URL.createObjectURL(file))

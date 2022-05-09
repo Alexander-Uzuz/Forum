@@ -1,9 +1,17 @@
-import React, { FC, useState, useEffect } from "react";
+import React, {
+  FC,
+  useState,
+  useEffect,
+  BaseSyntheticEvent,
+  useRef,
+  useCallback
+} from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import useUnsavedChangesWarning from "../hooks/useUnsavedChangesWarning";
 
-import {fetchAddPost, fetchChangePost} from '../PostThunk'
+import { fetchAddPost, fetchChangePost } from "../PostThunk";
 import { IPost } from "../interfaces/IPost";
 import { Input, Button } from "common/components";
 import { InputFile } from "../components/cAddPost/InputFile";
@@ -11,85 +19,110 @@ import { ImageFieldPost } from "../components/cAddPost/ImageFieldPost";
 import Icons from "assets/icons/inputFIleIcons.svg";
 import PublishIcon from "assets/icons/publishIcon.svg";
 import { useAppSelector, useAppDispatch } from "core/redux/hooks";
+import { ReactComponent as Camera } from "assets/icons/camera.svg";
+import {checkedForbiddenWords} from 'common/helpers/checkedForbiddenWords';
+import {useTranslation} from 'react-i18next';
 
 type Props = {};
 
 export const AddPost: FC<Props> = (props: Props) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const {id} = useParams();
-  const {user} = useAppSelector(state => state.user)
-  const {posts} = useAppSelector(state => state.posts)
-  const currentPost = posts.find(post => post.id === Number(id))
+  const [Prompt, setDirty, setPristine]:any = useUnsavedChangesWarning();
+  const { id } = useParams();
+  const { user } = useAppSelector((state) => state.user);
+  const { posts } = useAppSelector((state) => state.posts);
+  const currentPost = posts.find((post) => post.id === Number(id));
   const [images, setImages] = useState([]);
   const [text, setText] = useState("");
-  const {register, handleSubmit, formState:{errors}, reset} = useForm<IPost>({
-    defaultValues:currentPost
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm<IPost>({
+    defaultValues: currentPost,
   });
 
-  const handleImage = (img: any) => {
-    setImages(img);
+
+
+
+  const handleImage = (event: BaseSyntheticEvent) => {
+    setImages(event.target.files[0]);
   };
 
-  const onSubmit = (data:IPost) =>{
-    console.log(data,'data')
+  const onSubmit = (data: IPost) => {
+    setPristine()
     if(!currentPost){
     dispatch(fetchAddPost({...data,avatarUrl:user.avatarUrl,token:user.token,author:user.username, userId:user.id}))
     }else{
       dispatch(fetchChangePost(data))
     }
     navigate('/posts')
+  };
+
+  const handleInput = (event:BaseSyntheticEvent) =>{
+    setText(checkedForbiddenWords(event.target.value))
+    setDirty()   
   }
 
   return (
-    <AddPostContainer>
-      <AddPostFormContainer onSubmit={handleSubmit(onSubmit)}>
-        {/* <Input placeholder="Add Tags" width="100%" /> */}
-        <Input placeholder="Add Theme" width="100%" {...register('title',{required:'Title is required'})} error={errors.title?.message}/>
-        <AddPostFieldContainer>
-          <AddPostFieldContentContainer>
-            <AddPostFieldTextarea
-              {...register('description',{required:'Description required',
-              minLength:{value:3,message:'Description must contain at least 3 characters'}})}
-              placeholder="Add your question"
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-            />
-            <AddPostFieldImages>
-              {images.length
-                ? images.map((image, index) => (
-                    <ImageFieldPost
-                      file={image}
-                      index={index}
-                      key={index}
-                      onRemove={(i: number) =>
-                        setImages(images.filter((img, index) => index !== i))
-                      }
-                    />
-                  ))
-                : null}
-            </AddPostFieldImages>
-          </AddPostFieldContentContainer>
-          <AddPostButtonsContainer>
-            <InputFile onChange={handleImage}>
-              <Button
-                text="Add File"
-                background="#1682FD"
-                images={Icons}
-                padding="8px 20px 8px 45px"
-                top="7px"
+    <>
+      <AddPostContainer>
+        <AddPostFormContainer onSubmit={handleSubmit(onSubmit)}>
+          <Input
+            placeholder="Add Theme"
+            width="100%"
+            {...register("title", { required: "Title is required" })}
+            error={errors.title?.message}
+          />
+          <AddPostFieldContainer>
+            <AddPostFieldContentContainer>
+              <AddPostFieldTextarea
+                {...register("description", {
+                  required: "Description required",
+                  minLength: {
+                    value: 3,
+                    message: "Description must contain at least 3 characters",
+                  },
+                })}
+                placeholder="Add your question"
+                value={text}
+                onChange={handleInput}
               />
-            </InputFile>
-            <Button
-              text="Publish"
-              images={PublishIcon}
-              padding="8px 20px 8px 45px"
-              top="8.5px"
-            />
-          </AddPostButtonsContainer>
-        </AddPostFieldContainer>
-      </AddPostFormContainer>
-    </AddPostContainer>
+              <AddPostFieldImages>
+                {images.length
+                  ? images.map((image, index) => (
+                      <ImageFieldPost
+                        file={image}
+                        index={index}
+                        key={index}
+                        onRemove={(i: number) =>
+                          setImages(images.filter((img, index) => index !== i))
+                        }
+                      />
+                    ))
+                  : null}
+              </AddPostFieldImages>
+            </AddPostFieldContentContainer>
+            <AddPostButtonsContainer>
+              <InputFile
+                {...register("image")}
+                imgHandler={handleImage}
+                listFile={images}
+              />
+              <Button
+                text="Publish"
+                images={PublishIcon}
+                padding="8px 20px 8px 45px"
+                top="8.5px"
+              />
+            </AddPostButtonsContainer>
+          </AddPostFieldContainer>
+        </AddPostFormContainer>
+      </AddPostContainer>
+      {Prompt}
+    </>
   );
 };
 

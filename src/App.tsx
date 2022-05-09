@@ -10,29 +10,26 @@ import { Profile } from "modules/authorization/pages/Profile";
 import { RequireAuth } from "common/hooks/RequireAuth";
 import { useAppSelector } from "core/redux/hooks";
 
+
 const App = () => {
-  const token = useAppSelector(state => state.user.user.token)
-
-
-  useEffect(() =>{
-  },[])
-
 
   return (
-    <Routes>
-      <Route path="/" element={<Navigate replace to="/login" />} />
-      <Route path="/" element={<WrapperComponents />}>
-        <Route path="/registration" element={<Registration />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/" element={<RequireAuth />}>
-          <Route path="/profile" element={<Profile/>}/>
-          <Route path="/posts" element={<Posts />} />
-          <Route path="/posts/:id" element={<PostView />} />
-          <Route path="posts/addPost" element={<AddPost />} />
-          <Route path="posts/addPost/:id" element={<AddPost />} />
+    <>
+      <Routes>
+        <Route path="/" element={<Navigate replace to="/login" />} />
+        <Route path="/" element={<WrapperComponents />}>
+          <Route path="/registration" element={<Registration />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<RequireAuth />}>
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/posts" element={<Posts />} />
+            <Route path="/posts/:id" element={<PostView />} />
+            <Route path="posts/addPost" element={<AddPost />} />
+            <Route path="posts/addPost/:id" element={<AddPost />} />
+          </Route>
         </Route>
-      </Route>
-    </Routes>
+      </Routes>
+    </>
   );
 };
 

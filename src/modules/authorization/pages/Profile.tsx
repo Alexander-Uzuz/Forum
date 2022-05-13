@@ -42,8 +42,6 @@ export const Profile: FC<Props> = (props) => {
 
   const handleInputFile = (event:BaseSyntheticEvent) => {
 
-    console.log('Изменения')
-
     var file = event.target.files[0];
     var reader = new FileReader();
     reader.readAsDataURL(file);
@@ -100,13 +98,28 @@ const ProfileTitle = styled.h1`
   text-transform: capitalize;
   color: ${({ theme }) => theme.colors.black};
   margin-bottom: 30px;
+
+  @media ${({theme}) => theme.media.tablet}{
+    text-align: center;
+  }
 `;
 
 const ProfileContainer = styled.div`
   display: flex;
+
+  @media ${({theme}) => theme.media.tablet}{
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
-const ProfilePhotoContainer = styled.div``;
+const ProfilePhotoContainer = styled.div`
+  @media ${({theme}) => theme.media.tablet}{
+    display:flex;
+    align-items: center;
+    flex-direction:column;
+  }
+`;
 
 const ProfilePhoto = styled.div`
   /* width: 160px;

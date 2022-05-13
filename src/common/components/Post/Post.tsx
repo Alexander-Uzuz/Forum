@@ -67,6 +67,11 @@ export const Post:FC<Props> = ({as,to,post,...props}) => {
           {post?.description}
         </PostCenterText>
       </PostCenter>
+      <PostMedia>
+        {post?.media?.image && <PostMediaImg src={post.media.image}/>}
+        {post?.media?.music && <PostMediaAudio src={post.media.music}/>}
+        {post?.media?.video && <PostMediaVideo src={post.media.video}/>}
+      </PostMedia>
       <PostBottom>
         <PostBottomTagsContainer {...props}>
           <PostBottomTag>golang</PostBottomTag>
@@ -116,6 +121,14 @@ const PostTop = styled.div`
   justify-content: space-between;
   margin-bottom: 15px;
 `;
+
+const PostMedia = styled.div``
+
+const PostMediaImg = styled.img``;
+
+const PostMediaAudio = styled.audio``;
+
+const PostMediaVideo = styled.video``;
 
 const PostTopContent = styled.div`
   display: flex;

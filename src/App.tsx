@@ -10,11 +10,10 @@ import { Profile } from "modules/authorization/pages/Profile";
 import { RequireAuth } from "common/hooks/RequireAuth";
 import { useAppSelector } from "core/redux/hooks";
 
-
 const App = () => {
-
   return (
     <>
+      {" "}
       <Routes>
         <Route path="/" element={<Navigate replace to="/login" />} />
         <Route path="/" element={<WrapperComponents />}>

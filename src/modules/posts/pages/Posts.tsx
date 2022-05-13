@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import { FC, useEffect } from "react";
 import styled from "styled-components";
 import { Post } from "../../../common/components/Post/Post";
 import {useAppDispatch, useAppSelector} from 'core/redux/hooks';

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import {useAppDispatch} from 'core/redux/hooks';
 import {removeUser} from 'modules/authorization/authSlice';
+import { useTranslation } from "react-i18next";
 
 type Props = {
   active:boolean;
@@ -10,6 +11,7 @@ type Props = {
 };
 
 export const ProfileMenu:FC<Props> = ({active, handleActive}) => {
+  const {t} = useTranslation();
     const dispatch = useAppDispatch();
 
     const handleExit = () => {
@@ -23,9 +25,8 @@ export const ProfileMenu:FC<Props> = ({active, handleActive}) => {
 
   return (
     <ProfileMenuContainer display={active ? 'block' : 'none'}>
-      <ProfileMenuItem to="/profile" onClick={handleMenu}>Настройки</ProfileMenuItem>
-      <ProfileMenuItem to="" onClick={handleMenu}>Помощь</ProfileMenuItem>
-      <ProfileMenuItem to="/login" onClick={handleExit}>Выйти</ProfileMenuItem>
+      <ProfileMenuItem to="/profile" onClick={handleMenu}>{t("settings")}</ProfileMenuItem>
+      <ProfileMenuItem to="/login" onClick={handleExit}>{t("exit")}</ProfileMenuItem>
     </ProfileMenuContainer>
   );
 };

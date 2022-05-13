@@ -4,12 +4,12 @@ import React, {
   useEffect,
   BaseSyntheticEvent,
   useRef,
-  useCallback
+  useCallback,
 } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import useUnsavedChangesWarning from "../hooks/useUnsavedChangesWarning";
+// import useUnsavedChangesWarning from "../hooks/useUnsavedChangesWarning";
 
 import { fetchAddPost, fetchChangePost } from "../PostThunk";
 import { IPost } from "../interfaces/IPost";
@@ -19,22 +19,32 @@ import { ImageFieldPost } from "../components/cAddPost/ImageFieldPost";
 import Icons from "assets/icons/inputFIleIcons.svg";
 import PublishIcon from "assets/icons/publishIcon.svg";
 import { useAppSelector, useAppDispatch } from "core/redux/hooks";
-import { ReactComponent as Camera } from "assets/icons/camera.svg";
-import {checkedForbiddenWords} from 'common/helpers/checkedForbiddenWords';
-import {useTranslation} from 'react-i18next';
+import Camera from "assets/icons/camera.svg";
+import Music from "assets/icons/music.svg";
+import Video from "assets/icons/video.svg";
+import { checkedForbiddenWords } from "common/helpers/checkedForbiddenWords";
+import { useTranslation } from "react-i18next";
 
 type Props = {};
 
+
+
 export const AddPost: FC<Props> = (props: Props) => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [Prompt, setDirty, setPristine]:any = useUnsavedChangesWarning();
+  // const [Prompt, setDirty, setPristine]: any = useUnsavedChangesWarning();
   const { id } = useParams();
   const { user } = useAppSelector((state) => state.user);
   const { posts } = useAppSelector((state) => state.posts);
   const currentPost = posts.find((post) => post.id === Number(id));
-  const [images, setImages] = useState([]);
+
+  // console.log(currentPost,'currentPost')
+  const [image, setImage] = useState<string[]>([]);
+  const [audio, setAudio] = useState<string[]>([]);
+  const [video, setVideo] = useState<string[]>([]);
   const [text, setText] = useState("");
+  const [error, setError] = useState("");
   const {
     register,
     handleSubmit,
@@ -44,27 +54,34 @@ export const AddPost: FC<Props> = (props: Props) => {
     defaultValues: currentPost,
   });
 
+  const handleImage = (base64:string) => setImage([...image,base64])
+  const handleAudio = (base64:string) => setAudio([...audio, base64])
+  const handleVideo = (base64:string) => setVideo([...video,base64])
 
 
-
-  const handleImage = (event: BaseSyntheticEvent) => {
-    setImages(event.target.files[0]);
-  };
 
   const onSubmit = (data: IPost) => {
-    setPristine()
+    // setPristine()
     if(!currentPost){
-    dispatch(fetchAddPost({...data,avatarUrl:user.avatarUrl,token:user.token,author:user.username, userId:user.id}))
+    dispatch(fetchAddPost(
+      {
+        ...data,
+        avatarUrl:user.avatarUrl,
+        token:user.token,
+        author:user.username, 
+        userId:user.id,
+      }))
     }else{
       dispatch(fetchChangePost(data))
     }
     navigate('/posts')
   };
 
-  const handleInput = (event:BaseSyntheticEvent) =>{
-    setText(checkedForbiddenWords(event.target.value))
-    setDirty()   
-  }
+  const handleInput = (event: BaseSyntheticEvent) => {
+    // setText(event.target.value)
+    setText(checkedForbiddenWords(event.target.value));
+    // setDirty()
+  };
 
   return (
     <>
@@ -91,28 +108,71 @@ export const AddPost: FC<Props> = (props: Props) => {
                 onChange={handleInput}
               />
               <AddPostFieldImages>
-                {images.length
-                  ? images.map((image, index) => (
+                {image.length ? (
+                  image.map((item,index) => {
+                    return (
                       <ImageFieldPost
-                        file={image}
-                        index={index}
-                        key={index}
-                        onRemove={(i: number) =>
-                          setImages(images.filter((img, index) => index !== i))
-                        }
-                      />
-                    ))
-                  : null}
+                      key={index}
+                      file={item}
+                      index={index}
+                      onRemove={(index:number) => setImage(image.filter((item,i) => index !== i))}
+                      type="images"
+                    />
+                    )
+                  })
+                ) : null}
+                {audio.length ? (
+                  audio.map((item, index) =>{
+                    return (
+                      <ImageFieldPost
+                      key={index}
+                      file={item}
+                      index={index}
+                      onRemove={(index:number) => setAudio(audio.filter((item, i) => index !== i))}
+                      type="audio"
+                    />
+                    )
+                  })
+                ) : null}
+                {video.length ? (
+                  video.map((item, index) =>{
+                    return(
+                      <ImageFieldPost
+                      key={index}
+                      index={index}
+                      file={item}
+                      onRemove={(index:number) => setVideo(video.filter((item, i) => index !== i))}
+                      type="video"
+                    />
+                    )
+                  })
+                ) : null}
               </AddPostFieldImages>
+              <ErrorMessage>{error && error}</ErrorMessage>
             </AddPostFieldContentContainer>
             <AddPostButtonsContainer>
-              <InputFile
-                {...register("image")}
-                imgHandler={handleImage}
-                listFile={images}
-              />
+              <InputFileContainer>
+                <InputFile
+                  type="image"
+                  handleError={setError}
+                  imgHandler={handleImage}
+                  icon={Camera}
+                />
+                <InputFile
+                  type="audio"
+                  handleError={setError}
+                  imgHandler={handleAudio}
+                  icon={Music}
+                />
+                <InputFile
+                  type="video"
+                  handleError={setError}
+                  imgHandler={handleVideo}
+                  icon={Video}
+                />
+              </InputFileContainer>
               <Button
-                text="Publish"
+                text={t("buttonPublist")}
                 images={PublishIcon}
                 padding="8px 20px 8px 45px"
                 top="8.5px"
@@ -121,7 +181,7 @@ export const AddPost: FC<Props> = (props: Props) => {
           </AddPostFieldContainer>
         </AddPostFormContainer>
       </AddPostContainer>
-      {Prompt}
+      {/* {Prompt} */}
     </>
   );
 };
@@ -168,4 +228,19 @@ const AddPostButtonsContainer = styled.div`
   align-items: center;
 `;
 
+const ErrorMessage = styled.p`
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 20px;
+  letter-spacing: 0.02em;
+  text-indent: 15px;
+  color: ${({ theme }) => theme.colors.red};
+  margin-bottom: 10px;
+`;
+
 const AddPostFieldImages = styled.div``;
+
+const InputFileContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;

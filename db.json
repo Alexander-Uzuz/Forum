@@ -13,72 +13,48 @@
       "id": 4
     },
     {
+      "username": "Alex1",
       "email": "uzuz14@mail.ru",
-      "password": "$2a$10$XJwhffVNRDmXoga9RQR.XujKXzuAe36hn77SKVoISNGQ8oVh.3Ixa",
-      "username": "Alex",
-      "id": 5
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InV6dXoxNEBtYWlsLnJ1IiwiaWF0IjoxNjUyNDUzODI1LCJleHAiOjE2NTI0NTc0MjUsInN1YiI6IjUifQ.1-_wrXRSoGW-GExsC3mnnnwF-3XfMR9wcN3-mU20hUs",
+      "id": 5,
+      "password": "$2a$10$KyxxsrfGrBGaAkvD.ntxTO8h21f6ZLpOZ134fvBJ4F33yg58k7fi.",
+      "newPassword": ""
     }
   ],
   "posts": [
     {
-      "title": "Пост 1 !!!",
-      "description": "Описание 1 ",
-      "author": "Victor",
-      "date": "Thu, 14 Apr 2022 15:13:01 GMT",
-      "userId": 2,
+      "title": "уаау",
+      "description": "ауауау1",
+      "image": {},
+      "author": "Alex",
+      "userId": 5,
+      "date": "Thu, 12 May 2022 07:34:46 GMT",
       "id": 1
     },
     {
-      "title": "Пост 2!!!",
-      "description": "Description",
+      "title": "уауау",
+      "description": "ауауауа",
+      "image": {},
       "author": "Alex",
-      "userId": 1,
-      "date": "Thu, 28 Apr 2022 14:25:07 GMT",
-      "id": 17
+      "userId": 5,
+      "date": "Thu, 12 May 2022 07:35:23 GMT",
+      "id": 2
     }
   ],
   "comments": [
     {
       "postId": 1,
-      "text": "Пост 1 ком 2",
-      "author": "Victor",
-      "date": "Thu, 21 Apr 2022 08:57:07 GMT",
+      "text": "уауауау",
+      "author": "Alex",
+      "date": "Thu, 12 May 2022 07:35:36 GMT",
+      "id": 1
+    },
+    {
+      "postId": 1,
+      "text": "11111111",
+      "author": "Alex",
+      "date": "Fri, 13 May 2022 14:57:18 GMT",
       "id": 2
-    },
-    {
-      "postId": 1,
-      "text": "Пост 1 ком 5",
-      "author": "Victor",
-      "date": "Thu, 21 Apr 2022 11:45:04 GMT",
-      "id": 12
-    },
-    {
-      "postId": 1,
-      "text": "Новый комент",
-      "author": "Alex",
-      "date": "Fri, 29 Apr 2022 06:13:42 GMT",
-      "id": 19
-    },
-    {
-      "postId": 1,
-      "text": "iehgeugoeug",
-      "author": "Alex",
-      "date": "Fri, 29 Apr 2022 08:21:23 GMT",
-      "id": 20
-    },
-    {
-      "postId": 1,
-      "text": "bfbffbbfbf",
-      "author": "Alex",
-      "date": "Fri, 29 Apr 2022 08:22:29 GMT",
-      "id": 21
-    },
-    {
-      "postId": 17,
-      "text": "rbbrbrbrbr",
-      "author": "Alex",
-      "date": "Sun, 01 May 2022 11:15:25 GMT",
-      "id": 22
     }
   ]
 }

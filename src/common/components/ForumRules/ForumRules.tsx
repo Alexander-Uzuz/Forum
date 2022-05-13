@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 
 type Props = {
@@ -7,6 +8,7 @@ type Props = {
 };
 
 export const ForumRules: FC<Props> = ({ activeRules, handleRules }) => {
+  const {t} = useTranslation();
   const handleHide = () => {
     handleRules(false);
   };
@@ -16,13 +18,11 @@ export const ForumRules: FC<Props> = ({ activeRules, handleRules }) => {
       <ForumRulesWrapper flag={activeRules} />
       <ForumRulesContainer flag={activeRules}>
         <ForumRulesFlex>
-          <ForumRulesTitle>Forum Rules</ForumRulesTitle>
-          <ForumRulesHide onClick={handleHide}>Hide</ForumRulesHide>
+          <ForumRulesTitle>{t("forumRulesTitle")}</ForumRulesTitle>
+          <ForumRulesHide onClick={handleHide}>{t("forumRulesHide")}</ForumRulesHide>
         </ForumRulesFlex>
-        <ForumRulesText>Минимальная длинна сообщения 3 символа</ForumRulesText>
-        <ForumRulesText>Максимальный размер файла 10 МБ</ForumRulesText>
         <ForumRulesText>
-          Запрещенные слова будут затираться звёздочками
+          {t("forumRulesSubtitle")}
         </ForumRulesText>
       </ForumRulesContainer>
     </>
@@ -62,10 +62,13 @@ const ForumRulesFlex = styled.div`
   justify-content: space-between;
 `;
 
-const ForumRulesTitle = styled.h1``;
+const ForumRulesTitle = styled.h1`
+  margin-bottom: 20px;
+`;
 
 const ForumRulesHide = styled.p`
   cursor: pointer;
+  max-width:375px;
 `;
 
 const ForumRulesText = styled.p``;

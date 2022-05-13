@@ -9,10 +9,12 @@ import { Title } from "../components/Title";
 import Background from "assets/images/backgroundLogin.png";
 import { fetchLogin } from "../authThunk";
 import { useAppDispatch, useAppSelector } from "core/redux/hooks";
+import {useTranslation} from 'react-i18next'
 
 type Props = {};
 
 export const Login: FC<Props> = (props) => {
+  const {t} = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { error, user } = useAppSelector((state) => state.user);
@@ -35,19 +37,20 @@ export const Login: FC<Props> = (props) => {
   }, [user]);
 
   return (
+    <Suspense fallback={<div>Loading...</div>}>
       <LoginWrapper>
         <FormContainer onSubmit={handleSubmit(onSubmit)}>
           <Title
-            title="Hello kitty"
-            subtitle="More than 150 questions are waiting for your wise suggestions!"
+            title={t("titleLogin")}
+            subtitle={t("subtitleLogin")}
           />
           <Input
-            placeholder="email"
+            placeholder={t("email")}
             {...register("email", { required: "Email required" })}
             error={!error ? errors.email?.message : ""}
           />
           <Input
-            placeholder="password"
+            placeholder={t("password")}
             type="password"
             {...register("password", {
               required: "Password required",
@@ -59,24 +62,38 @@ export const Login: FC<Props> = (props) => {
             error={!error ? errors.password?.message : ""}
           />
           {error ? <ErrorMessage>{error}</ErrorMessage> : ""}
-          <Button text="Login" width="100%" type="submit" />
+          <Button text={t("buttonLogin")} width="100%" type="submit" />
         </FormContainer>
         <LoginImages src={Background} />
       </LoginWrapper>
+    </Suspense>
   );
 };
 
 const FormContainer = styled.form`
   margin-left: 120px;
+
+  @media ${({theme}) => theme.media.laptopL}{
+    margin-left: 0;
+  }
 `;
 
 const LoginWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @media ${({theme}) => theme.media.laptopL}{
+    justify-content: center;
+    height:100vh;
+  }
 `;
 
-const LoginImages = styled.img``;
+const LoginImages = styled.img`
+  @media ${({theme}) => theme.media.laptopL}{
+    display:none;
+  }
+`;
 
 const ErrorMessage = styled.p`
   font-weight: 500;

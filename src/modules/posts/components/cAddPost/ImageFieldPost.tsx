@@ -4,21 +4,21 @@ import styled from "styled-components";
 type Props = {
   file: any;
   onRemove?: any;
-  index: any;
+  index?:number;
+  type:'images' | 'video' | 'audio';
 };
-export const ImageFieldPost: FC<Props> = ({ file, onRemove, index }) => {
-  const [fileUrl, setFileUrl] = useState<any>(null);
+export const ImageFieldPost: FC<Props> = ({ file, onRemove,index, type}) => {
 
-  useEffect(() => {
-    if (file) {
-      setFileUrl(URL.createObjectURL(file));
-    }
-  }, [file]);
+  const handleRemove = () =>{
+    onRemove(index)
+  }
 
   return (
     <ImageContainer>
-      <ImageImg alt="image" src={fileUrl} />
-      <ImageRemove onClick={() => onRemove(index)}>
+      {
+        type === 'images' ? <ImageImg alt="image" src={file} /> : (type === 'video' ? <Video src={file} controls/> : <Audio src={file} controls/>)
+      }
+      <ImageRemove onClick={handleRemove}>
         <p>x</p>
       </ImageRemove>
     </ImageContainer>
@@ -38,6 +38,15 @@ const ImageImg = styled.img`
   width: auto;
   height: auto;
 `;
+
+const Video = styled.video`
+  height:112px;
+  margin-top: 10px;
+`
+
+const Audio = styled.audio`
+  margin-top:10px;
+`
 
 const ImageRemove = styled.div`
   position: absolute;

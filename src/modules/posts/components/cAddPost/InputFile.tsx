@@ -1,36 +1,53 @@
 import React, { FC, useRef, BaseSyntheticEvent, forwardRef, useState, useEffect } from "react";
 import styled from "styled-components";
 import { ReactComponent as Camera } from "assets/icons/camera.svg";
+import {imgFile,musicFile,videoFile} from 'common/hooks/validation'
 
 type Props = {
-  listFile?: any;
+  type:"image" | "audio" | "video";
+  handleError:(error:string) => void;
   imgHandler?: any;
+  icon:any;
 };
 
+const validateFile = {
+  'image': imgFile,
+  'audio': musicFile,
+  'video': videoFile
+}
+
 export const InputFile = forwardRef<HTMLInputElement, Props>(
-  ({ listFile, imgHandler, ...attr }, ref) => {
-    const [image, setImage] = useState('');
+  ({imgHandler, type,handleError,icon, ...attr }, ref) => {
 
-    useEffect(() =>{
-        if(typeof listFile === 'string'){
-            setImage(listFile)
-            imgHandler(listFile)
-        }else if(listFile instanceof Object && listFile[0]){
-            setImage(URL.createObjectURL(listFile[0]))
 
+    const handleChangeImage = async (e:BaseSyntheticEvent) =>{
+      const file = e.target.files;
+
+      if(!file || file.length === 0) return
+      imgHandler('')
+      handleError && handleError('')
+      
+      const result = await validateFile[type](file[0]);
+      if(result){
+        handleError && handleError(result);
+      }else{
+        const fileReader = new FileReader();
+        fileReader.onloadend = function(){
+          imgHandler(fileReader.result as string);
         }
-    },[listFile])
-
+        fileReader.readAsDataURL(file[0])
+      }
+    }
 
     return (
       <>
         <InputFileContainer>
-          <Camera className="camera" />
+          <FileIcon src={icon}/>
           <InputFileField
             type="file"
             ref={ref}
-            accept={"image/png,image/jpeg"}
-            onChange={imgHandler}
+            // accept={"image/png,image/jpeg"}
+            onChange={handleChangeImage}
           />
         </InputFileContainer>
       </>
@@ -39,15 +56,15 @@ export const InputFile = forwardRef<HTMLInputElement, Props>(
 );
 
 const InputFileContainer = styled.label`
-  width: 126px;
+  width: 40px;
   height: 30px;
+`;
 
-  .camera {
+const FileIcon = styled.img`
     width: 25px;
     height: 25px;
-    cursor: pointer;
-  }
-`;
+    cursor: pointer;  
+`
 
 const InputFileField = styled.input`
   display: none;

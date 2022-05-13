@@ -10,7 +10,6 @@ export const fetchGetPosts:any = createAsyncThunk(
         try{
             const response = await getPosts(token);
 
-            // dispatch(getPostsReducer(response))
             return response;
 
         }catch(err:any){
@@ -25,7 +24,6 @@ export const fetchGetPost:any = createAsyncThunk(
         try{
             const response = await getPost(data);
 
-            // dispatch(getPostReducer(response))
             return response;
         }catch(err:any){
             return rejectWithValue(err.message)
@@ -39,7 +37,6 @@ export const fetchAddPost:any = createAsyncThunk(
         try{
             const response = await addPost(data);
 
-            // dispatch(addPostReducer(response))
             return response;
 
         }catch(err:any){

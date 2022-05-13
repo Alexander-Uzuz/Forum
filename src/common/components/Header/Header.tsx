@@ -8,19 +8,36 @@ import RegisterImg from "assets/icons/buttonRegister.svg";
 import Plus from "assets/icons/askQuestionPlus.svg";
 import Avatar from "assets/icons/avatar.svg";
 import { useAppSelector } from "core/redux/hooks";
+import { NavBar } from "../NavBar/NavBar";
+import { LangMenu } from "../LangMenu/LangMenu";
+import { useTranslation } from "react-i18next";
 import { useParams, Link,useLocation } from "react-router-dom";
+import Burger from 'assets/icons/burger.svg';
+import World from 'assets/icons/world.png';
 
 type Props = {
   handleRules:(activeRules:boolean) => void;
 };
 
 export const Header: FC<Props> = ({handleRules}) => {
+  const {t, i18n} = useTranslation();
   const { user } = useAppSelector((state) => state.user);
   const [active, setActive] = useState(false);
+  const [activeBurger, setActiveBurger] = useState(false);
+  const [activeLang, setActiveLang] = useState(false);
   const history = useLocation();
 
   useEffect(() =>{setActive(false)}, [history.pathname])
 
+  const changeLanguage = (lang:string) =>{
+    i18n.changeLanguage(lang);
+  }
+
+  const handleLang = () => setActiveLang(!activeLang);
+
+  const handleBurgerMenu = () => {
+    setActiveBurger(!activeBurger);
+  }
 
   const handleMenu = () => setActive(!active)
 
@@ -31,25 +48,26 @@ export const Header: FC<Props> = ({handleRules}) => {
       {user.token ? (
         <HeaderButtonsContainer>
           <Button
-            text="Ask a question"
+            text={t("buttonAsk")}
             padding="12px 20px 12px 45px"
             images={Plus}
             as={Link}
             to="posts/addPost"
           />
           <Button 
-          text="Get data about Admin"
+          text={t("buttonGetAboutAdmin")}
           margin="0 0 0 20px"
           as={'a'}
           download
           href="rulesForum.docx"
           />
           <Button
-            text="Forum Rules"
+            text={t("buttonForumRules")}
             margin="0 0 0 20px"
             background="#1682FD"
             handle={handleRules}
           />
+          <WorldImg src={World} onClick={handleLang}/>
           <HeaderSetting onClick={handleMenu}>
             <AvatarImg src={user.avatarUrl ? user.avatarUrl : Avatar} />
             <HeaderImg src={Arrow} className="arrow" />
@@ -59,14 +77,14 @@ export const Header: FC<Props> = ({handleRules}) => {
         <HeaderButtonsContainer>
           <Button
             images={RegisterImg}
-            text="Registration"
+            text={t("buttonRegister")}
             margin="0 16px 0 0"
             padding="12px 20px 12px 45px"
             as={Link}
             to="/registration"
           />
           <Button
-            text="Login"
+            text={t("buttonLogin")}
             background="#EAEAEA"
             color="#1682FD"
             as={Link}
@@ -74,6 +92,9 @@ export const Header: FC<Props> = ({handleRules}) => {
           />
         </HeaderButtonsContainer>
       )}
+      <LangMenu display={activeLang} handler={changeLanguage}/>
+      <MenuBurger src={Burger} onClick={handleBurgerMenu}/>
+      <NavBar display={activeBurger} token={user.token} handleMenu={setActiveBurger}/>
       <ProfileMenu active={active} handleActive={setActive}/>
     </HeaderContainer>
   );
@@ -86,6 +107,7 @@ const HeaderContainer = styled.div`
   background: ${({ theme }) => theme.colors.white};
   border-bottom: 1px solid #eaeaea;
   padding: 23px 50px;
+
 `;
 
 const HeaderSetting = styled.div`
@@ -94,7 +116,11 @@ const HeaderSetting = styled.div`
   cursor: pointer;
 `;
 
-const HeaderImgLink = styled(Link)``
+const HeaderImgLink = styled(Link)`
+  @media ${({theme}) => theme.media.tablet}{
+    margin-bottom: 10px;
+  }
+`
 
 const HeaderImg = styled.img`
   &.arrow {
@@ -104,9 +130,28 @@ const HeaderImg = styled.img`
   }
 `;
 
+const WorldImg = styled.img`
+  width:24px;
+  height:24px;
+  margin-left: 20px;
+  cursor:pointer;
+`
+
+const MenuBurger = styled.img`
+  display: none;
+
+  @media ${({theme}) => theme.media.laptop}{
+    display:block;
+  }
+`
+
 const HeaderButtonsContainer = styled.div`
   display: flex;
   align-items: center;
+
+  @media ${({theme}) => theme.media.laptop}{
+    display:none;
+  }
 `;
 
 const HeaderTitle = styled.h1``;

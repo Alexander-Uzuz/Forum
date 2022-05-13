@@ -39,6 +39,10 @@ const AddPhotoLabel = styled.label`
   margin-right: 136px;
   cursor:pointer;
   background: #9c9c9c;
+
+  @media ${({theme}) => theme.media.tablet}{
+    margin-right: 0;
+  }
 `;
 
 const AddPhotoIcon = styled.img`

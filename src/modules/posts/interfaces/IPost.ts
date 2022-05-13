@@ -9,10 +9,12 @@ export interface IPost{
     date?:string;
     message:string;
     avatarUrl?:string;
-    image?:any;
-    video?:any;
-    music?:any;
     token?:string;
+    media?:{
+        image?:string;
+        video?:string;
+        music?:string;
+    }
 }
 
 export interface IPostState{

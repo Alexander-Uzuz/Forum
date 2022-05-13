@@ -1,6 +1,6 @@
 export const checkedForbiddenWords = (str:any) =>{
 
-    const regex = /\b(?:one|two|three)\b/gi;
+    const regex = /\b(?:блин|мудак|каблук)\b/gi;
 
     function replaceForBiddenWords(subject:string, words:any) {
         function createStars(num:number) {

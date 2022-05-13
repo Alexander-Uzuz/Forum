@@ -48,6 +48,10 @@ const ButtonContainer = styled.div<{
     position:relative;
     margin:${({margin}) => margin ? margin : '0'};
     text-decoration: none;
+
+    @media ${({theme}) => theme.media.tablet}{
+      margin:${({margin}) => margin ? '0 0 10px 0' : '0'};
+    }
 `;
 
 interface IButtonBtn{

@@ -38,10 +38,12 @@ const commentsSlice = createSlice({
 
         builder.addCase(fetchAddComments .pending,(state) =>{
             state.error = null;
+            state.loading = true;
         });
         builder.addCase(fetchAddComments .fulfilled, (state,action) =>{
             state.comments.push(action.payload)
-            state.commentsPost.push(action.payload);           
+            state.commentsPost.push(action.payload);
+            state.loading = false;           
         });
         builder.addCase(fetchAddComments .rejected, (state, action) =>{
             state.error = action.payload;
@@ -49,10 +51,12 @@ const commentsSlice = createSlice({
 
         builder.addCase(fetchRemoveComments .pending, state =>{
             state.error = null;
+            state.loading = true;
         });
         builder.addCase(fetchRemoveComments .fulfilled, (state, action) =>{
             state.comments = state.comments.filter(comment => comment.id !== action.payload);
             state.commentsPost = state.comments.filter(comment => comment.id !== action.payload);
+            state.loading = false;
         });
         builder.addCase(fetchRemoveComments .rejected, (state,action) =>{
             state.error = action.payload;

@@ -1,4 +1,4 @@
-import React,{FC, useState} from 'react';
+import React,{BaseSyntheticEvent, FC, useState} from 'react';
 import {Outlet} from 'react-router-dom';
 import { Header } from '../Header/Header';
 import styled from 'styled-components';
@@ -8,6 +8,7 @@ type Props = {}
 
 export const WrapperComponents:FC<Props> = () => {
   const [activeRules, setActiveRules] = useState(false);
+
 
 
   return (

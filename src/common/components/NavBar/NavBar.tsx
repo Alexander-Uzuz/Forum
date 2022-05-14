@@ -60,6 +60,7 @@ const NavBarContainer = styled.div<{
   left: 0;
   right: 0;
   z-index: 999;
+  /* background-color: rgba(0,0,0,0.5); */
 `;
 
 const NavBarLinkContainer = styled.div<{
@@ -70,9 +71,9 @@ const NavBarLinkContainer = styled.div<{
   display: block;
   text-align: center;
   padding-top: 20px;
-  transition: 0.4s ease;
   position: absolute;
-  left:${({flag}) => flag ? '0px' : '-900px'};
+  left:${({flag}) => flag ? '0px' : '-300px'};
+  transition: 0.4s ease;
 `;
 
 const NavBarLink = styled(Link)`

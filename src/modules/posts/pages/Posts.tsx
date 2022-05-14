@@ -28,7 +28,7 @@ export const Posts: FC<Props> = (props: Props) => {
         <Spinner />
       ) : (
         <PostsContainer>
-          {posts
+          {posts.length
             ? posts.map((post) => {
                 const obj = comments.find((c) => Number(c.postId) === post.id);
                 return (
@@ -42,7 +42,10 @@ export const Posts: FC<Props> = (props: Props) => {
                   />
                 );
               })
-            : ""}
+            : <NoPosts>
+              <NoPostText>Здесь пока нет постов!</NoPostText>
+              <NoPostsLink to='/posts/addPost'>Хотите добавить?</NoPostsLink>
+              </NoPosts>}
         </PostsContainer>
       )}
     </>
@@ -54,3 +57,18 @@ const PostsContainer = styled.div`
   max-width: 725px;
   margin: 20px auto;
 `;
+
+const NoPosts = styled.div`
+  width: 100vw;
+  height:100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+`
+
+const NoPostText = styled.p``;
+
+const NoPostsLink = styled(Link)`
+  display:block;
+`

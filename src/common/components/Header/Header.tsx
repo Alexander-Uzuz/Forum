@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { BaseSyntheticEvent, FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import { ProfileMenu } from "../ProfileMenu/ProfileMenu";
 import Logo from "assets/icons/Logo.svg";
@@ -26,6 +26,18 @@ export const Header: FC<Props> = ({handleRules}) => {
   const [activeBurger, setActiveBurger] = useState(false);
   const [activeLang, setActiveLang] = useState(false);
   const history = useLocation();
+
+  useEffect(() => {
+    const handleBurger = (e:any) =>{
+      if(activeBurger && !e.target.closest('.burger')){
+        setActiveBurger(false)
+      }
+    }
+
+    document.addEventListener('click', (e) => handleBurger(e))
+
+    document.removeEventListener('click', (e) => handleBurger(e))
+  },[activeBurger])
 
   useEffect(() =>{setActive(false)}, [history.pathname])
 
@@ -93,7 +105,7 @@ export const Header: FC<Props> = ({handleRules}) => {
         </HeaderButtonsContainer>
       )}
       <LangMenu display={activeLang} handler={changeLanguage}/>
-      <MenuBurger src={Burger} onClick={handleBurgerMenu}/>
+      <MenuBurger src={Burger} onClick={handleBurgerMenu}  className='burger'/>
       <NavBar display={activeBurger} token={user.token} handleMenu={setActiveBurger}/>
       <ProfileMenu active={active} handleActive={setActive}/>
     </HeaderContainer>
@@ -142,6 +154,7 @@ const MenuBurger = styled.img`
 
   @media ${({theme}) => theme.media.laptop}{
     display:block;
+    cursor: pointer;
   }
 `
 

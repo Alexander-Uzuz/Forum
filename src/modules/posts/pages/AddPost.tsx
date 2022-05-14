@@ -78,7 +78,6 @@ export const AddPost: FC<Props> = (props: Props) => {
   };
 
   const handleInput = (event: BaseSyntheticEvent) => {
-    // setText(event.target.value)
     setText(checkedForbiddenWords(event.target.value));
     // setDirty()
   };
@@ -104,7 +103,7 @@ export const AddPost: FC<Props> = (props: Props) => {
                   },
                 })}
                 placeholder="Add your question"
-                value={text}
+                value={text.replace(/\(%!XXX1!%|\^xxXxx\^|!@#TTT\(\*&\)/gi, () => '*****')}
                 onChange={handleInput}
               />
               <AddPostFieldImages>

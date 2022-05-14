@@ -1,7 +1,6 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {addPost, getPosts, getPost, changePost,removePost} from 'api/posts/postsService';
 import { IPost } from './interfaces/IPost';
-import { addPostReducer, removePostReducer,getPostsReducer,getPostReducer,changePostReducer } from './postsSlice';
 
 
 export const fetchGetPosts:any = createAsyncThunk(

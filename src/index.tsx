@@ -11,7 +11,6 @@ import 'core/i18n/i18n';
 
 
 ReactDOM.render(
-  <React.StrictMode>
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <BrowserRouter>
@@ -21,8 +20,7 @@ ReactDOM.render(
           </Suspense>
         </Provider>
       </BrowserRouter>
-    </ThemeProvider>
-  </React.StrictMode>,
+    </ThemeProvider>,
   document.getElementById("root")
 );
 

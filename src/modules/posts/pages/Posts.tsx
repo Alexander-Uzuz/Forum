@@ -9,11 +9,12 @@ import { Spinner } from "common/components/Spinner/Spinner";
 
 type Props = {};
 
+
+
 export const Posts: FC<Props> = (props: Props) => {
   const dispatch = useAppDispatch();
   const { posts, loading } = useAppSelector((state) => state.posts);
-  const { comments } = useAppSelector((state) => state.comments);
-  const token = useAppSelector((state) => state.user.user.token);
+  const token = useAppSelector((state) => state.user.user?.token);
 
   useEffect(() => {
     if (token) {
@@ -30,7 +31,6 @@ export const Posts: FC<Props> = (props: Props) => {
         <PostsContainer>
           {posts.length
             ? posts.map((post) => {
-                const obj = comments.find((c) => Number(c.postId) === post.id);
                 return (
                   <Post
                     key={post.id}

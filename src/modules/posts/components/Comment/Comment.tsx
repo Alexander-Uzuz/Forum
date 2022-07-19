@@ -17,7 +17,7 @@ type Props = {
 }
 
 export const Comment:FC<Props> = ({comment}) => {
-  const token = useAppSelector(state => state.user.user.token);
+  const token = useAppSelector(state => state.user.user?.token);
   const [active, setActive] = useState(false);
   const dispatch = useAppDispatch();
 

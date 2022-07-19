@@ -10,7 +10,6 @@ import {
 } from "modules/comments/commentsThunk";
 import { getCurrentCommentsReducer } from "modules/comments/commentsSlice";
 import { useAppDispatch, useAppSelector } from "core/redux/hooks";
-import { IComment } from "../../comments/interfaces/IComment";
 import { Post } from "common/components/Post/Post";
 import { Comment } from "../components/Comment/Comment";
 import { Button } from "common/components";
@@ -35,28 +34,28 @@ export const PostView: FC<Props> = (props: Props) => {
     formState: { errors },
     reset,
   } = useForm<{ text: string }>();
-  const currentComments = comments.find((c) => c.postId == id);
 
   useEffect(() => {
     (async function () {
       if (!comments.length) {
-        await dispatch(fetchGetComments(user.token));
+        await dispatch(fetchGetComments(user?.token));
       }
-      if (user.token) {
-        await dispatch(fetchGetPost({ token: user.token, id }));
+      if (user?.token) {
+        await dispatch(fetchGetPost({ token: user?.token, id }));
         dispatch(getCurrentCommentsReducer(id));
       }
     })();
   }, []);
 
+
   const onSubmit = (data: { text: string }) => {
     const commentData = {
       postId: Number(id),
       ...data,
-      author: user.username,
+      author: user?.username,
       date: new Date().toUTCString(),
-      avatarUrl: user.avatarUrl,
-      token: user.token,
+      avatarUrl: user?.avatarUrl,
+      token: user?.token,
     };
 
     dispatch(fetchAddComments(commentData));

@@ -1,7 +1,7 @@
 import { createSlice,PayloadAction } from "@reduxjs/toolkit";
-import { ICommentState,IComment } from "./interfaces/IComment";
+import { ICommentState } from "./interfaces/IComment";
 import {fetchGetComments, fetchAddComments, fetchRemoveComments} from './commentsThunk'
-import {setPending,setFulfilledGetComments, setRejected,setFulfilledAddComments} from './helpers/commentsHelpers'
+
 
 
 const initialState:ICommentState = {

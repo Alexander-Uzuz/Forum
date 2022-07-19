@@ -21,7 +21,7 @@ type Props = {
 
 export const Header: FC<Props> = ({handleRules}) => {
   const {t, i18n} = useTranslation();
-  const { user } = useAppSelector((state) => state.user);
+  const {user} = useAppSelector(state => state?.user)
   const [active, setActive] = useState(false);
   const [activeBurger, setActiveBurger] = useState(false);
   const [activeLang, setActiveLang] = useState(false);
@@ -57,7 +57,7 @@ export const Header: FC<Props> = ({handleRules}) => {
     <HeaderContainer>
       <HeaderImgLink to="/posts"><HeaderImg src={Logo}/></HeaderImgLink>
       <HeaderTitle></HeaderTitle>
-      {user.token ? (
+      {user?.token ? (
         <HeaderButtonsContainer>
           <Button
             text={t("buttonAsk")}
@@ -106,7 +106,7 @@ export const Header: FC<Props> = ({handleRules}) => {
       )}
       <LangMenu display={activeLang} handler={changeLanguage}/>
       <MenuBurger src={Burger} onClick={handleBurgerMenu}  className='burger'/>
-      <NavBar display={activeBurger} token={user.token} handleMenu={setActiveBurger}/>
+      <NavBar display={activeBurger} token={user?.token} handleMenu={setActiveBurger}/>
       <ProfileMenu active={active} handleActive={setActive}/>
     </HeaderContainer>
   );

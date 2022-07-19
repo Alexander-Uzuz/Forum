@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IStateUser } from "./interfaces/authorizationInterface";
-import {setPending, setFulfilled,setRejected,setFulfilledLoginChange} from './helpers/authorizationHelpers'
-import { fetchLogin,fetchRegistration, fetchLoginChange } from "./authThunk";
+import {setPending, setFulfilled,setRejected} from './helpers/authorizationHelpers'
+import { fetchLogin,fetchRegistration } from "./authThunk";
 
 
 
@@ -22,23 +22,17 @@ const userSlice = createSlice({
     initialState,
     reducers:{
         removeUser(state){
-            state.user.username = null;
-            state.user.email = null;
-            state.user.avatarUrl = null;
-            state.user.token = null;
-            state.user.id = null;
+            state.user = null;
         }
     },
-    extraReducers:{
-        [fetchLogin.pending]:setPending,
-        [fetchLogin.fulfilled]:setFulfilled,
-        [fetchLogin.rejected]:setRejected,
-        [fetchRegistration.pending]:setPending,
-        [fetchRegistration.fulfilled]:setFulfilled,
-        [fetchRegistration.rejected]:setRejected,
-        [fetchLoginChange.pending]:setPending,
-        [fetchLoginChange.fulfilled]:setFulfilledLoginChange,
-        [fetchLoginChange.rejected]:setRejected,
+    extraReducers:(builder) =>{
+        builder.addCase(fetchLogin .pending, setPending)
+        builder.addCase(fetchLogin .fulfilled, setFulfilled)
+        builder.addCase(fetchLogin .rejected, setRejected)
+
+        builder.addCase(fetchRegistration .pending, setPending)
+        builder.addCase(fetchRegistration .fulfilled, setFulfilled)
+        builder.addCase(fetchRegistration .rejected, setRejected)
     }
 })
 

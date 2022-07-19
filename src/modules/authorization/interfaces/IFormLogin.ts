@@ -9,7 +9,7 @@ export interface IFormLoginFull{
     username:string | null;
     token:string | null;
     avatarUrl: string | null;
-    id:number;
+    id:number | null;
     newPassword?:string;
     againNewPassword?:string;
 }

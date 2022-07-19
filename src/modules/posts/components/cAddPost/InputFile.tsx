@@ -1,6 +1,5 @@
 import React, { FC, useRef, BaseSyntheticEvent, forwardRef, useState, useEffect } from "react";
 import styled from "styled-components";
-import { ReactComponent as Camera } from "assets/icons/camera.svg";
 import {imgFile,musicFile,videoFile} from 'common/hooks/validation'
 
 type Props = {

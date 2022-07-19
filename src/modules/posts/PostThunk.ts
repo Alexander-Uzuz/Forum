@@ -36,10 +36,15 @@ export const fetchAddPost:any = createAsyncThunk(
         try{
             const response = await addPost(data);
 
+            console.log(response,'response')
+
             return response;
 
         }catch(err:any){
-            return rejectWithValue(err.message);
+
+            if(err.status === 401){
+                return rejectWithValue('jwt expired');
+            }
         }
     }
 )

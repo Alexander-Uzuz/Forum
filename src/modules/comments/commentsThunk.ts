@@ -1,11 +1,10 @@
-import { IComment } from './interfaces/IComment';
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {getComments,addComments,removeComments} from 'api/comments/commentsService';
 
 
 export const fetchGetComments:any = createAsyncThunk(
     'comments/fetchGetComments',
-    async function(token:any,{rejectWithValue, dispatch}){
+    async function(token:any,{rejectWithValue}){
         try{
             const response = await getComments(token);
 
@@ -17,7 +16,7 @@ export const fetchGetComments:any = createAsyncThunk(
 
 export const fetchAddComments:any = createAsyncThunk(
     'comments/fetchAddComments',
-    async function(data:any,{rejectWithValue, dispatch}){
+    async function(data:any,{rejectWithValue}){
         try{
             const response = await addComments(data);
 

@@ -1,5 +1,5 @@
 export interface IStateUser{
-    user:IStateUserData,
+    user:IStateUserData | null,
     error:null | string;
 }
 

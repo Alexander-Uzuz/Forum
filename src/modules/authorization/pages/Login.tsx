@@ -25,12 +25,12 @@ export const Login: FC<Props> = (props) => {
   } = useForm<IFormLogin>();
 
   const onSubmit = (data: IFormLogin) => {
-    console.log(data, "data");
     dispatch(fetchLogin(data));
   };
 
+
   useEffect(() => {
-    if (user.token) {
+    if (user?.token) {
       localStorage.setItem("user", JSON.stringify(user));
       navigate("/posts");
     }

@@ -1,22 +1,12 @@
-import React, {
-  FC,
-  useState,
-  useEffect,
-  BaseSyntheticEvent,
-  useRef,
-  useCallback,
-} from "react";
+import {FC,useState,BaseSyntheticEvent, useEffect} from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
-// import useUnsavedChangesWarning from "../hooks/useUnsavedChangesWarning";
-
+import { useNavigate, useParams } from "react-router-dom";
 import { fetchAddPost, fetchChangePost } from "../PostThunk";
 import { IPost } from "../interfaces/IPost";
 import { Input, Button } from "common/components";
 import { InputFile } from "../components/cAddPost/InputFile";
 import { ImageFieldPost } from "../components/cAddPost/ImageFieldPost";
-import Icons from "assets/icons/inputFIleIcons.svg";
 import PublishIcon from "assets/icons/publishIcon.svg";
 import { useAppSelector, useAppDispatch } from "core/redux/hooks";
 import Camera from "assets/icons/camera.svg";
@@ -24,52 +14,55 @@ import Music from "assets/icons/music.svg";
 import Video from "assets/icons/video.svg";
 import { checkedForbiddenWords } from "common/helpers/checkedForbiddenWords";
 import { useTranslation } from "react-i18next";
+import { removeUser } from "modules/authorization/authSlice";
 
 type Props = {};
 
-
-
-export const AddPost: FC<Props> = (props: Props) => {
+export const AddPost: FC<Props> = (props) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  // const [Prompt, setDirty, setPristine]: any = useUnsavedChangesWarning();
   const { id } = useParams();
   const { user } = useAppSelector((state) => state.user);
-  const { posts } = useAppSelector((state) => state.posts);
+  const { posts,error } = useAppSelector((state) => state.posts);
   const currentPost = posts.find((post) => post.id === Number(id));
-
-  // console.log(currentPost,'currentPost')
   const [image, setImage] = useState<string[]>([]);
   const [audio, setAudio] = useState<string[]>([]);
   const [video, setVideo] = useState<string[]>([]);
   const [text, setText] = useState("");
-  const [error, setError] = useState("");
+  const [_error, _setError] = useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
   } = useForm<IPost>({
     defaultValues: currentPost,
   });
 
+  useEffect(() => {
+    if(error === "jwt expired"){
+      dispatch(removeUser())
+      localStorage.removeItem('token');
+      navigate('/login')
+    }
+  },[error])
+
+
+
   const handleImage = (base64:string) => setImage([...image,base64])
   const handleAudio = (base64:string) => setAudio([...audio, base64])
   const handleVideo = (base64:string) => setVideo([...video,base64])
-
-
+  const handleInput = (event: BaseSyntheticEvent) => setText(checkedForbiddenWords(event.target.value));
 
   const onSubmit = (data: IPost) => {
-    // setPristine()
     if(!currentPost){
     dispatch(fetchAddPost(
       {
         ...data,
-        avatarUrl:user.avatarUrl,
-        token:user.token,
-        author:user.username, 
-        userId:user.id,
+        avatarUrl:user?.avatarUrl,
+        token:user?.token,
+        author:user?.username, 
+        userId:user?.id,
       }))
     }else{
       dispatch(fetchChangePost(data))
@@ -77,10 +70,7 @@ export const AddPost: FC<Props> = (props: Props) => {
     navigate('/posts')
   };
 
-  const handleInput = (event: BaseSyntheticEvent) => {
-    setText(checkedForbiddenWords(event.target.value));
-    // setDirty()
-  };
+  
 
   return (
     <>
@@ -153,19 +143,19 @@ export const AddPost: FC<Props> = (props: Props) => {
               <InputFileContainer>
                 <InputFile
                   type="image"
-                  handleError={setError}
+                  handleError={_setError}
                   imgHandler={handleImage}
                   icon={Camera}
                 />
                 <InputFile
                   type="audio"
-                  handleError={setError}
+                  handleError={_setError}
                   imgHandler={handleAudio}
                   icon={Music}
                 />
                 <InputFile
                   type="video"
-                  handleError={setError}
+                  handleError={_setError}
                   imgHandler={handleVideo}
                   icon={Video}
                 />

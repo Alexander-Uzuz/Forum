@@ -1,14 +1,6 @@
 import { createSlice,PayloadAction } from "@reduxjs/toolkit";
 import {IPostState,IPost} from './interfaces/IPost';
 import {
-  setPending,
-  setFulfilledAdd,
-  setFulfilledGetPosts,
-  setFulfilledGetPost,
-  setFulfilledChangePost,
-  setRejected,
-} from "./helpers/postHelpers";
-import {
   fetchAddPost,
   fetchGetPosts,
   fetchGetPost,
@@ -26,27 +18,11 @@ const initialState: IPostState = {
 const postsSlice = createSlice({
   name: "posts",
   initialState,
-  reducers: {
-      // getPostsReducer(state:IPostState,action:PayloadAction<IPost[]>){
-      //   state.posts = action.payload;
-      // },
-      // getPostReducer(state:IPostState,action:PayloadAction<IPost>){
-      //   state.post = action.payload
-      // },
-      // addPostReducer(state:IPostState,action:PayloadAction<IPost>){
-      //   state.posts.push(action.payload);
-      // },
-      // removePostReducer(state:IPostState,action:PayloadAction<number>){
-      //   state.posts = state.posts.filter(post => post.id !== action.payload);
-      // },
-      // changePostReducer(state:IPostState,action:PayloadAction<IPost>){
-      //   let currentPost = state.posts.find(post => post.id === action.payload.id);
-      //   currentPost = action.payload
-      // }
-  },
+  reducers: {},
   extraReducers: (builder) =>{
     builder.addCase(fetchAddPost.pending, state =>{
       state.loading = true;
+      state.error = null;
     });
     builder.addCase(fetchAddPost.fulfilled, (state,action:PayloadAction<IPost>) =>{
       state.loading = false;
@@ -58,6 +34,7 @@ const postsSlice = createSlice({
 
     builder.addCase(fetchGetPosts.pending, state =>{
       state.loading = true;
+      state.error = null;
     });
     builder.addCase(fetchGetPosts.fulfilled,(state,action:PayloadAction<IPost[]>) =>{
       state.posts = action.payload;
@@ -82,8 +59,7 @@ const postsSlice = createSlice({
       state.loading = true;
     })
     builder.addCase(fetchChangePost .fulfilled, (state,action:PayloadAction<IPost>) =>{
-      let currentPost = state.posts.find(post => post.id === action.payload.id);
-      currentPost = action.payload;
+      state.posts = state.posts.map(item => item.id === action.payload.id ? action.payload : item);
       state.loading = false;
     })
     builder.addCase(fetchChangePost .rejected, (state, action) =>{
@@ -102,8 +78,6 @@ const postsSlice = createSlice({
     })
   },
 });
-// addPostReducer, removePostReducer,getPostsReducer, getPostReducer,changePostReducer
-
 
 export const {} = postsSlice.actions;
 export default postsSlice.reducer;

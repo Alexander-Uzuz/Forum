@@ -5,7 +5,7 @@ import {useAppSelector} from 'core/redux/hooks';
 type Props = {}
 
 export const RequireAuth = (props: Props) => {
-    const token = useAppSelector(state => state.user.user.token);
+    const token = useAppSelector(state => state?.user?.user?.token);
 
     if(token){
         return <Outlet/>

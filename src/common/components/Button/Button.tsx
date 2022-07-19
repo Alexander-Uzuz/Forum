@@ -1,7 +1,6 @@
 import React,{FC} from "react";
 import { Link } from "react-router-dom";
 import styled, { ThemeContext } from "styled-components";
-import RegisterImg from '../../../assets/icons/buttonRegister.svg';
 
 type Props = {
     images?:any;

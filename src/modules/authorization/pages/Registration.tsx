@@ -27,7 +27,7 @@ export const Registration: FC<Props> = (props) => {
   }
 
   useEffect(() => {
-    if(user.token){
+    if(user?.token){
       navigate('/posts')
     }
   }, [user])

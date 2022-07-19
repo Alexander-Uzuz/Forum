@@ -1,13 +1,7 @@
 import React, { FC } from "react";
-import {
-  ProfileMenuContainer,
-  ProfileMenuItem,
-} from "../ProfileMenu/ProfileMenu";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "core/redux/hooks";
-import {fetchRemovePost} from 'modules/posts/PostThunk';
-import {} from 'modules/posts/PostThunk';
 
 type Props = {
   active: boolean;
@@ -21,7 +15,7 @@ type Props = {
 
 
 export const PocoMenu: FC<Props> = ({ active,id, onChange,role,handleDelete,...props }) => {
-  const {token} = useAppSelector(state => state.user.user);
+  const token = useAppSelector(state => state.user.user?.token)
   const dispatch = useAppDispatch();
 
   const handleRemove = () =>{

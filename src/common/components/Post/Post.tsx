@@ -1,4 +1,4 @@
-import {BaseSyntheticEvent, FC, useState} from "react";
+import {BaseSyntheticEvent, FC, useState, memo} from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
@@ -20,13 +20,14 @@ type Props = {
   to?:string;
 };
 
-export const Post:FC<Props> = ({as,to,post,...props}) => {
-  const token = useAppSelector(state => state.user.user.token)
+const PostInner:FC<Props> = ({as,to,post,...props}) => {
+  const token = useAppSelector(state => state.user.user?.token)
   const comments = useAppSelector(state => state.comments.comments);
   const currentComments = comments.filter(c => c.postId === post?.id);
   const [activeMenu, setActiveMenu] = useState(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
 
   const handleMenu = () => {
     setActiveMenu(!activeMenu);
@@ -96,6 +97,8 @@ export const Post:FC<Props> = ({as,to,post,...props}) => {
     </PostWrapper>
   );
 };
+
+export const Post = memo(PostInner);
 
 const PostWrapper = styled.div`
   display: block;
